@@ -39,6 +39,7 @@ app.use('/dinamicas', require('./routes/dinamicasRoutes'));
 app.use('/jogos', require('./routes/jogosRoutes'));
 app.use('/desafios', require('./routes/desafiosRoutes'));
 app.use('/respostas', require('./routes/respostasRoutes'));
+app.use('/clientes', require('./routes/clientesRoutes'));
 
 //error handling
 app.use((error, req, res, next) => {

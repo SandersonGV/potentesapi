@@ -77,6 +77,50 @@ const Opcao = database.define('opcao', {
     }
 });
 
+const Cliente = database.define('cliente', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    nome: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    maxMonitores: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
+    },
+    maxGrupos: {
+        type: Sequelize.INTEGER,
+        allowNull: false,        
+        defaultValue:0
+    },
+    ativo: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:true
+    }
+})
+
+const User = database.define('user', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    nome: Sequelize.STRING,
+    email: {
+        type:Sequelize.STRING,
+        unique: true
+    },
+    password: Sequelize.STRING,
+    tipo: Sequelize.INTEGER,
+    ativo: Sequelize.BOOLEAN,
+});
+
 const Grupo = database.define('grupo', {
     id: {
         type: Sequelize.INTEGER,
@@ -86,14 +130,6 @@ const Grupo = database.define('grupo', {
     },
     data: {
         type: Sequelize.DATE,
-        allowNull: false
-    },
-    cliente: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    monitor: {
-        type: Sequelize.STRING,
         allowNull: false
     },
     status: {
@@ -143,6 +179,12 @@ const Resposta = database.define('resposta', {
 
 //associacoes
 
+User.belongsTo(Cliente)
+
+Cliente.hasMany(User)
+Cliente.hasMany(Grupo)
+
+Grupo.belongsTo(Cliente)
 Grupo.belongsTo(Jogo)
 Grupo.hasMany(Participante)
 
@@ -163,4 +205,4 @@ Opcao.belongsTo(Desafio)
 
 Resposta.belongsTo(Desafio)
 
-module.exports = { Dinamica, Jogo, Desafio, Opcao,Grupo,Participante,Resposta, database };
+module.exports = { Dinamica, Jogo, Desafio, Opcao,Grupo,Participante,Resposta, database, Cliente, User };

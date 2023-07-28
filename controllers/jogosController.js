@@ -70,7 +70,7 @@ class JogosController {
                 return res.status(404).json({ message: 'Jogo not found!' });
             }
             for (const key of Object.keys(payload)) {
-                if (jogo[key])
+                if (key in jogo)
                     jogo[key] = payload[key]
             }
 

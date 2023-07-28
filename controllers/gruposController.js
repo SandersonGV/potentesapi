@@ -94,7 +94,7 @@ class GruposController {
                 return res.status(404).json({ message: 'Grupo not found!' });
             }
             for (const key of Object.keys(payload)) {
-                if (grupo[key])
+                if (key in grupo)
                     grupo[key] = payload[key]
             }
 

@@ -8,4 +8,7 @@ router.post('/', controller.createUser); // /users
 router.put('/:userId', controller.updateUser); // /users/:userId
 router.delete('/:userId', controller.deleteUser); // /users/:userId
 
+//Auth
+router.post('/tryLogin', controller.tryLogin); // /users
+
 module.exports = router;

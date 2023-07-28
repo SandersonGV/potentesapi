@@ -69,7 +69,7 @@ class DinamicasController {
                 return res.status(404).json({ message: 'Dinamica not found!' });
             }
             for (const key of Object.keys(payload)) {
-                if (dinamica[key])
+                if (key in dinamica)
                     dinamica[key] = payload[key]
             }
 

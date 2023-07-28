@@ -1,10 +1,35 @@
-const UserModel = require('../models/user');
+const {User} = require('../models/models');
+const bcrypt = require("bcryptjs")
 
 // CRUD Controllers
 class UsersController {
+    tryLogin = async (req, res, next) => {
+        try {
+            const { email, password } = req.body;
+            const user = await User.findOne({ include:"cliente",where: { email: email } })
+            if (!user) {
+                return res.status(401).json({
+                    message: "Login not successful",
+                })
+            }
+            const hash = await bcrypt.compare(password, user.password)
+            if(!hash){
+                return res.status(401).json({
+                    message: "Login not successful",
+                })
+            }
+            
+            res.status(200).json({ content: user });
+
+        } catch (error) {
+            console.log(error)
+            next(error);
+        }
+    }
+
     getUsers = async (req, res, next) => {
         try {
-            const users = await UserModel.findAll({order: [['id', 'ASC']]})
+            const users = await User.findAll({include:"cliente", order: [['id', 'ASC']] })
             res.status(200).json({ content: users });
         } catch (error) {
             console.log(error)
@@ -15,7 +40,7 @@ class UsersController {
     getUser = async (req, res, next) => {
         try {
             const userId = req.params.userId;
-            const user = UserModel.findByPk(userId)
+            const user = await User.findByPk(userId)
             if (!user) {
                 return res.status(404).json({ message: 'User not found!' });
             }
@@ -29,14 +54,21 @@ class UsersController {
 
     createUser = async (req, res, next) => {
         try {
-            const { name, email, password } = req.body;
+            const { nome, email, password, clienteId, tipo } = req.body;
 
-            const result = await UserModel.create({
-                name: name,
+            const hash = await bcrypt.hash(password, 10)
+            let userObj = {
+                nome: nome,
                 email: email,
-                password: password,
+                password: hash,
+                tipo: tipo,
                 ativo: true
-            })
+            }
+            if(clienteId){
+                userObj.clienteId = clienteId
+            }
+
+            const result = await User.create(userObj)
             res.status(201).json({
                 message: 'User created successfully!',
                 content: result
@@ -53,7 +85,7 @@ class UsersController {
             const userId = req.params.userId;
             const { name, email, password } = req.body;
 
-            const user = await UserModel.findByPk(userId)
+            const user = await User.findByPk(userId)
             if (!user) {
                 return res.status(404).json({ message: 'User not found!' });
             }
@@ -82,7 +114,7 @@ class UsersController {
         try {
             const userId = req.params.userId;
 
-            const user = await UserModel.findByPk(userId)
+            const user = await User.findByPk(userId)
             if (!user) {
                 return res.status(404).json({ message: 'User not found!' });
             }

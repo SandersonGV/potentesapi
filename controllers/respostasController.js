@@ -58,7 +58,7 @@ class RespostasController {
                 return res.status(404).json({ message: 'Resposta not found!' });
             }
             for (const key of Object.keys(payload)) {
-                if (resposta[key])
+                if (key in resposta)
                     resposta[key] = payload[key]
             }
 

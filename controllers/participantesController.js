@@ -73,7 +73,7 @@ class ParticipantesController {
             }
 
             for (const key of Object.keys(payload)) {
-                if (participante[key])
+                if (key in participante)
                 participante[key] = payload[key]
             }
 
