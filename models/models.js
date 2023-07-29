@@ -132,6 +132,14 @@ const Grupo = database.define('grupo', {
         type: Sequelize.DATE,
         allowNull: false
     },
+    inicio: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
+    termino: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
     status: {
         type: Sequelize.INTEGER,
         allowNull: false,        
@@ -180,12 +188,14 @@ const Resposta = database.define('resposta', {
 //associacoes
 
 User.belongsTo(Cliente)
+User.hasMany(Grupo)
 
 Cliente.hasMany(User)
 Cliente.hasMany(Grupo)
 
 Grupo.belongsTo(Cliente)
 Grupo.belongsTo(Jogo)
+Grupo.belongsTo(User)
 Grupo.hasMany(Participante)
 
 Participante.belongsTo(Grupo)

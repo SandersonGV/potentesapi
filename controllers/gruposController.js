@@ -1,4 +1,4 @@
-const { Grupo, Jogo, Participante, Desafio, Opcao, Dinamica } = require('../models/models');
+const { Grupo, Jogo, Participante, Desafio, Opcao, Dinamica, Cliente, User } = require('../models/models');
 
 // CRUD Controllers
 class GruposController {
@@ -10,6 +10,10 @@ class GruposController {
             const grupos = await Grupo.findAll({
                 include: [
                     { model: Jogo, include: "dinamica" },
+                    { model: Cliente, required: false,
+                        attributes: ['id', 'nome'] },
+                    { model: User, required: false,
+                        attributes: ['id', 'nome'] },
                     {
                         model: Participante, where: { ativo: true },
                         required: false
@@ -37,8 +41,8 @@ class GruposController {
                                 { model: Dinamica },
                                 {
                                     model: Desafio,
-                                    include:"opcoes"
-                                    
+                                    include: "opcoes"
+
                                 }
                             ],
                             order: [['id', 'ASC']]
@@ -48,7 +52,13 @@ class GruposController {
                             where: { ativo: true },
                             required: false,
                             include: "resposta"
-                        }
+                        },
+                        { model: Cliente, required: false,
+                            attributes: ['id', 'nome'] },
+                        {
+                            model: User, required: false,
+                            attributes: ['id', 'nome']
+                        },
                     ],
                 })
             if (!grupo) {
@@ -64,13 +74,14 @@ class GruposController {
 
     createGrupo = async (req, res, next) => {
         try {
-            const { data, cliente, monitor, jogoId } = req.body;
+            const { data, cliente, monitor, jogoId, clienteId } = req.body;
 
             const result = await Grupo.create({
                 data: data,
                 cliente: cliente,
                 monitor: monitor,
                 jogoId: jogoId,
+                clienteId: clienteId,
                 ativo: true
             })
             res.status(201).json({
