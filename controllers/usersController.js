@@ -19,7 +19,7 @@ class UsersController {
                 })
             }
             
-            res.status(200).json({ content: user });
+            return res.status(200).json({ content: user });
 
         } catch (error) {
             console.log(error)
@@ -30,7 +30,7 @@ class UsersController {
     getUsers = async (req, res, next) => {
         try {
             const users = await User.findAll({include:"cliente", order: [['id', 'ASC']] })
-            res.status(200).json({ content: users });
+            return res.status(200).json({ content: users });
         } catch (error) {
             console.log(error)
             next(error);
