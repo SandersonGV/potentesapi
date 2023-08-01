@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 });
 
 
-const port = 3030
+const port = 3000
 //sync database
 sequelize
   .sync()
