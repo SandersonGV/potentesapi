@@ -5,15 +5,19 @@ const bcrypt = require("bcryptjs")
 class UsersController {
     tryLogin = async (req, res, next) => {
         try {
-            const { email, password } = req.body;
+            const {email, password } = req.body;
+            console.log(new Date(), email, password,"linha 13")
             const user = await User.findOne({ include:"cliente",where: { email: email } })
+            console.log(new Date(), user)
             if (!user) {
+                console.log(new Date(), "linha 13")
                 return res.status(401).json({
                     message: "Login not successful",
                 })
             }
             const hash = await bcrypt.compare(password, user.password)
             if(!hash){
+                console.log(new Date(), "linha 20")
                 return res.status(401).json({
                     message: "Login not successful",
                 })
