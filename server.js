@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyparser = require('body-parser');
 const sequelize = require('./util/database');
+require('dotenv').config()
+const { APP_PORT } = process.env
 
 const app = express();
 
@@ -14,7 +16,7 @@ app.use((req, res, next) => {
 });
 
 
-const port = 3000
+const port = APP_PORT
 //sync database
 sequelize
   .sync()

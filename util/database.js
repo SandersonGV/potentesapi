@@ -1,20 +1,27 @@
 const Sequelize = require('sequelize');
 require('dotenv').config()
-const { DB_HOST,DB_DATABASE, DB_USERNAME, DB_PASSWORD } = process.env
+const { DB_TYPE, DB_HOST, DB_DATABASE, DB_USERNAME, DB_PASSWORD } = process.env
+
+const sequelizeOptions = {
+    host: DB_HOST,
+    dialect: 'postgres',
+
+}
+if (DB_TYPE == "ssl") {
+    sequelizeOptions.dialectOptions = {
+        ssl: {
+            require: false,
+            rejectUnauthorized: false
+        }
+    }
+}
+
+
 const sequelize = new Sequelize(
     DB_DATABASE,
     DB_USERNAME,
     DB_PASSWORD,
-    {
-        host: DB_HOST,
-        dialect: 'postgres',
-        dialectOptions: {
-            ssl: {
-                require: true,
-                rejectUnauthorized: false
-            }
-        },
-    }
+    sequelizeOptions
 );
 
 module.exports = sequelize;
